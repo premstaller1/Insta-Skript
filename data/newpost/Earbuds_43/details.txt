@@ -1,0 +1,5 @@
+Project Name: Earbuds
+Description: TWS EARBUDS designed for a Portfolio to be submitted in design institutes
+Designer: arnav.dh14
+Company: nan
+Support: nan

@@ -1,0 +1,9 @@
+Project Name: salt
+Description: Das salt ist ein leichtes, wendiges und praktisches Elektromotorrad, welches ich im Rahmen meiner Bachelorarbeit (5 Monate) bei der Firma ID DESIGN als internes Projekt speziell für den innerstädtischen Gebrauch entwickelt habe. Durch das puristische, elegante und vor allem funktionale Design eignet es sich perfekt für den Weg zur Arbeit, zum Einkaufen oder dem Transport von mittelgroßen Gegenständen. Bei der Ausarbeitung handelt es sich um ein Konzept - das salt wird nicht zum Kaufen erhältlich sein.
+Ein Universaladapter hinter der Sitzbank schafft eine Plattform für eine Vielzahl an praktischen Modulen für den täglichen Gebrauch des Bikes. Der Adapter dient dabei aber nicht nur zur Befestigung der Module, sondern ist so gestaltet, dass er selbst als Trägereinheit für Kisten, Kartons oder anderen großen Gegenständen fungieren kann.
+Das klappbare Blech oberhalb der Batterie schützt diese vor Diebstahl sowie vor anderen Umwelteinflüssen wie Regen oder Schnee. Im unteren Bereich ist die Batterie durch ein weiteres partielles Blechhousing geschützt und dadurch sicher gelagert. 
+Um die Reichweite des salt zu erweitern, kann im Stauraum vor der Batterie eine zusätzliche Batterie platziert werden. Somit wird die Reichweite von 70km auf 140km verdoppelt.
+
+Designer: we_develop_products
+Company: ID DESIGN Produktentwicklung GmbH & Co. KG
+Support: nan

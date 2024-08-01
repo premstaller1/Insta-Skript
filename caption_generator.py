@@ -3,6 +3,8 @@ import os
 import pandas as pd
 import requests
 from transformers import AutoModelForCausalLM, AutoTokenizer
+from huggingface_hub import login
+login(token="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")
 
 def sanitize_filename(filename):
     # Define invalid characters

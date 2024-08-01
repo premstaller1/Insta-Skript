@@ -1,0 +1,5 @@
+Project Name: Whirlwave
+Description: 'WhirlWave' is a Bluetooth speaker that features a rotatable speakerbar to deliver three-dimensional sound to people at a distance. It has two channels in the center and one at the bottom, and can be rotated 90 degrees to optimize the acoustic experience depending on the space.
+Designer: @lilgaesion
+Company: -
+Support: nan

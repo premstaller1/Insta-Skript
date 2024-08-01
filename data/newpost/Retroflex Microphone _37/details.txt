@@ -1,0 +1,5 @@
+Project Name: Retroflex Microphone 
+Description: I call this microphone design "Retroflex". The design language was inspired by the streamline design movement. A hinge between the front and rear stand pieces allows for  adjustment, while the microphone body can rotate separately on a swivel joint. The body is suspended from this joint to isolate it from the stand, which helps to prevent unwanted vibrations from being captured. 
+Designer: @willparsons_design
+Company: nan
+Support: nan

@@ -1,0 +1,17 @@
+Project Name: io - i once 
+Description: IO - 2 days project
+
+io, which stands for "I Once” and which means “me” in Italian, is the first personal memory assistant of its kind. 
+The experience is made of two main moments: observe and dialogue. 
+
+The observe moment allows you to capture photos, sounds and videos with an almost 360°, ensuring the best possible frame. 
+
+The dialogue moment is triggered by the AI assistant once the AI switch is activated. 
+To activate the assistant, press the trigger button and recite the phrase "I once" followed by your memory. (ex. I once went to lake come in February 2024) The device will then use AI for image and sound recognition to bring back your experiences. The Ai will actually  provide different possible outcomes for your phrase, then previewed on the screen to be chosen among.
+
+In summary, io captures your moments with advanced technology and assists you in recalling and sharing your memories effortlessly and mainly without needing a phone.
+
+I would still change a lot of things honestly(good design takes time), but I gave myself two days and so it’ll be✌🏼
+Designer: @fed_obj
+Company: Orbisk (but project unrelated)
+Support: nan
