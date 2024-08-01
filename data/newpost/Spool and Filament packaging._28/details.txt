@@ -1,0 +1,5 @@
+Project Name: Spool and Filament packaging.
+Description: 📦 Visual Representation of a 3D Printing Spool and Filament packaging. This 3D product was designed using Blender 3.6 as a Sample Design for a client.
+Designer: @modeling_maestro
+Company: Doorstep Studio (Pvt) Ltd
+Support: nan

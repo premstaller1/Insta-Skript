@@ -1,0 +1,5 @@
+Project Name: Dessert Lights
+Description: We often take everything far too seriously in life. That‘s why we want to bring fun and lightness into your life with the Dessert Lights. The Dessert Lights are lights in the shape of sweets that push the possibilities of 3D printing with their unique shapes and structures. That is why our shapes are often designed in such a way that they could not be realized with any other manufacturing process. The product line consists of pendant lights and table lamps in various shapes and colors. They are not only a unique eye-catcher at home, but can also create a cool atmosphere in stores, restaurants and cafés and enchant guests.
+Designer: struct3d
+Company: STRUCT3D
+Support: nan

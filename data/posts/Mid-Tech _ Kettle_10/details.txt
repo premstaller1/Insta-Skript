@@ -1,0 +1,14 @@
+Project Name: Mid-Tech : Kettle
+Description: In 2020, the average recycling rate in France was 43%, with significant variations across different regions and socio-economic levels, highlighting existing social inequalities. Our exploration into recycling has revealed its limitations, showing that it alone cannot solve waste management issues. It is crucial to reduce waste production at its source, leading us to the discovery of low-tech solutions.
+
+Each year, more than 50 million tons of electronic waste accumulate worldwide, with up to 10% consisting of printed circuit boards.
+Our goal is to design a balanced product: a kettle that achieves a balance between the comfort of high-tech and the durability of low-tech.
+
+The idea is to create harmonious technological solutions that leverage the best of both worlds, demonstrating that innovative, desirable, sustainable, and reasonably priced household appliances, which are easily recyclable, can be created without compromising on comfort. Low-tech solutions should be actively promoted by designers.
+
+This project aspires to democratize the dissemination of low-tech and simple innovations in our daily lives, ensuring functionality and comfort remain uncompromised.
+
+In the end, we were able to cut the number of elements in a traditional kettle by almost half while incorporating a filtration and thermometer system that is 100% low-tech and durable. For the heating system, we used a traditional bimetal strip system that does not require electronic PCB cards. The project is designed for extremely easy disassembly and sorting of materials for recycling, with a fair price in the actual market. And we aim to prevent an estimated 4226 kilotons of carbon dioxide per year by using this kettle.
+Designer: https://www.instagram.com/baptiste_grenon/
+Company: Entre autre
+Support: nan

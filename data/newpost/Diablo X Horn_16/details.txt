@@ -1,0 +1,6 @@
+Project Name: Diablo X Horn
+Description: The task of this project was to create a 3D model and render according to the reference images that I received from the manufacturer. 
+I hope you will like it.
+Designer: euroneuro
+Company: nan
+Support: nan
