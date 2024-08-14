@@ -1,5 +1,0 @@
-Project Name: Pocket Morse
-Description: Pocket Morse, An innovation for emergency signalling in out door activities to educational purposes in learning morse code . Useful for hobbyists, adventurers of retro communication methods,all within the palm of your hand.
-Designer: designbyshashi
-Company: Design therapy 
-Support: nan

@@ -1,5 +1,0 @@
-Project Name: Bizerba Meat Slicer
-Description: For many years the Bizerba brand has been synonymous with quality and precision, standing as a worldwide leading specialist in industrial equipment. Collaborating closely with Bizerba’s Czech-based division we have designed the concept vision for the first meat slicer in the home-use category. This new product combines the robust functionality the brand is known for with a sleek, modern aesthetic that complements any home kitchen. Maintaining space for key mechanical and electrical components from industrial-use parent devices, was an important part of the design to keep original quality and precision the company is known for.
-Designer: @lesid_design
-Company: lesid
-Support: nan

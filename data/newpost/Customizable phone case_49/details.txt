@@ -1,5 +1,0 @@
-Project Name: Customizable phone case
-Description: Phone case product animation showcasing its customizable features, making it ideal for anyone looking to express their personality
-Designer: @qaisar.yegimbayev
-Company: YQVisuals
-Support: nan

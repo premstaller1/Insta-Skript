@@ -1,5 +1,0 @@
-Project Name: Cake
-Description: Our Apple Watch case, designed to fit in your pocket in place of your iPhone; reducing distractions and promoting a more intentional lifestyle.
-Designer: @cake.computer
-Company: CAKE COMPUTER LLC
-Support: nan
