@@ -1,0 +1,5 @@
+Project Name: Hang in there.
+Description: In this project, I explored a new software called Womp, a web-based modeling tool that features a playful option called Goop. This tool allows objects to take on a clay-like quality and morph into different shapes, reminiscent of the creativity I admired in Keith Haring's art as a child. Inspired by the iconic Magis Puppy, I designed a series of characters that can easily be adjusted into various stances. I am currently producing these characters on a small scale using my 3D printer, with plans to sell them in the future. Hope you enjoy!
+Designer: https://www.instagram.com/mees.slewe.design/
+Company: meesslewedesign
+Support: nan

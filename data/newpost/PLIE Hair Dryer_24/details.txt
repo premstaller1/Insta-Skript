@@ -1,0 +1,11 @@
+Project Name: PLIE Hair Dryer
+Description: This project aims to design a portable hair dryer that will meet the needs of people with short hair type for daily or weekly regular use.
+
+The goal is to create a hair dryer that not only meets functional needs but also integrates seamlessly into the user's lifestyle, providing a convenient and reliable solution for hair care.
+
+Ease of use is another important consideration, emphasizing an ergonomic design that fits comfortably in the user’s hand. Its lightweight construction ensures that maneuvering the device is effortless, even during extended use.
+
+In this regard, functionality, ergonomics, portability and security elements constitute the main focal points of the project with a user-oriented approach.
+Designer: @hzeyneb.ozdemir
+Company: -
+Support: nan

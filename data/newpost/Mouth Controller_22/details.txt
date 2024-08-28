@@ -1,0 +1,5 @@
+Project Name: Mouth Controller
+Description: The tech market focused on people with limited abilities is evolving, bringing new, open-source technological solutions public. Enhancement of people’s abilities is a great area that allows the development of new products with a positive impact. In recent years different technological advancements were made in the area of mouth and tongue operating devices. Unfortunately, most of those inventions have not yet received enough design attention to transform them into aesthetic consumer electronics products with broader use cases. For those reasons, we have decided to design one device that can become an everyday gadget and serve not only to disabled but also enhance known human abilities. Our design combines technologies such as Tongue Tracking with Press Buttons, Sip & Puff and Teeth Bite, forming a unique product in this category.
+Designer: lesid_design
+Company: lesid
+Support: nan

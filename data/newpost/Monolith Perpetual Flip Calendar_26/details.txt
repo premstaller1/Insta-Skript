@@ -1,0 +1,5 @@
+Project Name: Monolith Perpetual Flip Calendar
+Description: A perpetual 31-days flip calendar for the modern minimalist
+Designer: monolith.calendar
+Company: MONOLITH
+Support: nan

@@ -1,0 +1,5 @@
+Project Name: Minimalist salicylic acid
+Description: Minimalist 3D rendering for salicylic acid dropper
+Designer: harsh.visualls
+Company: nan
+Support: nan

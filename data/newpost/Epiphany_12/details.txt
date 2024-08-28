@@ -1,0 +1,5 @@
+Project Name: Epiphany
+Description: Is a circular bookshelf that allows the user to move around it, creating an almost hypnotic experience. The bookshelf offers different compartments, all of the same size, but where you can store everything from books to decorations and everyday items. It belongs to a furniture collection.
+Designer: vancartii
+Company: vancartii
+Support: nan
