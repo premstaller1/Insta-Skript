@@ -1,5 +1,0 @@
-Project Name: Braun Toy Dryer
-Description: Fusion of Minimal, Bauhaus design language, with child-like, toy design to create an eclectic hair dryer!
-Designer: bytask.design
-Company: Bytask
-Support: nan

@@ -1,5 +1,0 @@
-Project Name: SEESUN
-Description: SEESUN is a product composed of a light to provide a good video condition and a web cam that helps a user to maintenance one's eye contact in video conferencing situations. 
-Designer: @apof.1
-Company: individual
-Support: nan
