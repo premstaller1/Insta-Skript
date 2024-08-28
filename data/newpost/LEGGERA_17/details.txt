@@ -1,9 +1,0 @@
-Project Name: LEGGERA
-Description: In today’s fast-paced technological landscape, where sustainability and user-centred solutions are increasingly prioritized, industrial design is crucial for tackling pressing societal issues. This master’s thesis project explores the intersection of innovative and emerging technologies, such as AI and generative design, sustainability, and user-centred design principles, in the context of prosthetic socket design. With a focus on enhancing the functionality, comfort, and accessibility of prosthetic devices, this research endeavours to contribute to the advancement of inclusive and impactful design solutions.
-
-Employing a design-driven approach that encompasses iterative prototyping and user-centred assessment, this thesis is not solely about pushing the boundaries of industrial design; it’s about empowering individuals. Its ultimate objective is to empower prosthetic users, granting them a sense of inclusiveness, dignity, and independence. The research recognizes the intricacies of designing for the human body and mind and is steered by an in-depth comprehension of user needs and experiences.
-
-This project paves the way for future research and development, offering hope for individuals with limb loss and fostering positive change in industrial design, thereby transforming the landscape of prosthetic socket solutions.
-Designer: andrtrlo
-Company: nan
-Support: nan
