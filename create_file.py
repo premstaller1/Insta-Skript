@@ -26,7 +26,6 @@ for index, row in df.iterrows():
     visuals_links = row['Upload your Visuals (max. 10!)']
     support = row["Support Frabiché"]
     company = row["Company Name"]
-    caption = generate_caption(project_name, description, designer)
     
     # Sanitize the project name
     sanitized_project_name = sanitize_filename(project_name)
@@ -43,6 +42,8 @@ for index, row in df.iterrows():
             pass
         else:
             designer = '@' + designer
+
+    caption = generate_caption(project_name, description, designer)
     
     # Create a directory for each project and name it using the project name and index
     project_dir = os.path.join(output_base_dir, f"{sanitized_project_name}_{index+1}")

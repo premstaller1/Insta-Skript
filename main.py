@@ -10,7 +10,7 @@ def generate_caption(project_name, description, designer):
     # Define the input messages
     print("Model loaded...")
     messages = [
-        ("system", "You are a skilled Social Media Manager responsible for crafting engaging captions for a design blog. For each post, you receive text with details about the author, the project name, the project, and relevant information. Your task is to write clear, compelling captions in the third person, tailored to Instagram, ensuring they resonate with the audience and highlight the design elements effectively. Do not add any comments to the captions that need to be filled out and always mention the Instagram Tag in the caption."),
+        ("system", "You are a skilled Social Media Manager responsible for crafting captions for a Instagram blog. For each post, you receive text with the designer, the project name, the project, and relevant information. Your task is to write clear, compelling captions in the third person, tailored to Instagram, ensuring they resonate with the audience and highlight the design elements effectively. Start the caption always with a wordplay about the design and always mention the designers tag in the caption. Do not overly use adjectives and do not add any comments to the captions that need to be filled out."),
         ("human", f"This is {project_name}] by {designer}. {description}"),
     ]
     
