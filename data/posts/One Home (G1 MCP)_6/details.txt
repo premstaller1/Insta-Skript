@@ -1,5 +1,0 @@
-Project Name:  One Home (G1 MCP)
-Description: I took great pleasure in modeling and animating this unique synthesizer. With its transparent potentiometers, dynamic oscilloscope display and speckled green design, this instrument combines meticulous aesthetics with sonic innovation.
-Designer: Younz.d1
-Company: Younes Lahmidi
-Support: nan

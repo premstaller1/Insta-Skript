@@ -1,5 +1,0 @@
-Project Name: Hair Dryer
-Description: I modelled this Hair dryer. Keeping it clean and minimalist. 
-Designer: https://www.instagram.com/shehroz_alisz/
-Company: Szart
-Support: nan

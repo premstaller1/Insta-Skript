@@ -1,5 +1,0 @@
-Project Name: Nanobreathe
-Description: Futuristic Inhaler, textured minimal plastic finishes with ergonomic sleek design
-Designer: bytask.design
-Company: Bytask
-Support: nan

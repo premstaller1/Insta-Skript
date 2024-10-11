@@ -1,7 +1,0 @@
-Project Name: OptiFit
-Description: OptiFit is an innovative wearable eye fitness device, designed to prioritize and enhance your visual well-being. In today's digital age, prolonged screen time and modern lifestyles have placed an increasing strain on our eyes. This cutting-edge eye fitness device is engineered to combat this issue, ensuring healthier and more comfortable vision.
-
-The device works on the principle of vision therapy where it integrates a set of different massages and exercises that help relax the eye muscles and exercise those eye muscles. Using the popular technique of reflexology, these massagers are placed at three acupoints around the eye that are intrinsic to eye health. Integrated with these massagers is the heat compression that provides hot compression to the eyes, leaving them calmer and more relaxed. Improving the strength and flexibility of the ciliary muscles helps improve eye health by enhancing the eye's ability to focus on objects at different distances, reducing eye strain and fatigue, thereby slowing down the progression of certain eye conditions such as myopia and hypermetropia.
-Designer: @designkaiv
-Company: Tata Elxsi
-Support: nan

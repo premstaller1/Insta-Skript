@@ -1,5 +1,0 @@
-Project Name: Terri
-Description: 'Terri' is a wearable walking assistance device designed to aid elderly dogs with diminished hind leg muscle mass. In companion dogs, weight distribution predominantly favors the front legs in a ratio of 7:3. As a result, by the average age of six, the muscle mass in the hind legs, which experience relatively less exercise, begins to diminish. This can lead to various health issues alongside the natural aging process. To address this issue, actuators and resistance motors are placed at the hip joint, the primary joint involved in leg movement, to reduce muscle strain when the dog moves. Unlike traditional dog wheelchairs, 'Terri' encourages the maintenance and enhancement of the dog's hind leg muscle mass.
-Designer: @junggwang.hwang.design
-Company: nan
-Support: nan
