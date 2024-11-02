@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caption Generator</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Caption Generator</h1>
+        
+        <!-- Upload Form -->
+        <form id="uploadForm" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="file">Upload CSV File:</label>
+                <input type="file" name="file" class="form-control-file" id="file" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Upload and Generate</button>
+        </form>
+
+        <!-- Stop Process Button -->
+        <button id="stopButton" class="btn btn-danger mt-3" style="display: none;">Stop Process</button>
+
+        <!-- Loading Spinner -->
+        <div id="loading-spinner" class="text-center mt-5" style="display: none;">
+            <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+            <p>Generating captions and downloading images, please wait...</p>
+        </div>
+
+        <!-- Display Captions and Images -->
+        <h3 class="mt-5">Generated Captions</h3>
+        <div id="captions-container" class="mt-3"></div>
+    </div>
+
+    <script>
+        document.getElementById("uploadForm").onsubmit = function(event) {
+            event.preventDefault();
+            document.getElementById("loading-spinner").style.display = "block";
+            document.getElementById("stopButton").style.display = "block"; // Show stop button
+
+            const formData = new FormData(document.getElementById("uploadForm"));
+
+            // First, upload the file via POST
+            fetch("/upload_and_process", {
+                method: "POST",
+                body: formData
+            }).then(response => response.json())
+              .then(data => {
+                if (data.success) {
+                    // Start the stream to receive project updates
+                    const eventSource = new EventSource("/stream_process");
+
+                    eventSource.onmessage = function(event) {
+                        const captionInfo = JSON.parse(event.data);
+
+                        // Create a new card for each project update
+                        const projectCard = document.createElement("div");
+                        projectCard.classList.add("card", "mt-4");
+
+                        const cardBody = document.createElement("div");
+                        cardBody.classList.add("card-body");
+
+                        const title = document.createElement("h5");
+                        title.classList.add("card-title");
+                        title.textContent = captionInfo.project_name;
+
+                        // Editable caption text area
+                        const captionText = document.createElement("textarea");
+                        captionText.classList.add("form-control", "caption-text");
+                        captionText.value = captionInfo.caption;
+                        captionText.disabled = true;
+
+                        // Toggle edit mode and save updated caption
+                        const editButton = document.createElement("button");
+                        editButton.classList.add("btn", "btn-secondary", "mt-3");
+                        editButton.textContent = "Edit";
+                        editButton.onclick = () => {
+                            captionText.disabled = !captionText.disabled;
+                            editButton.textContent = captionText.disabled ? "Edit" : "Save";
+                            if (captionText.disabled) {
+                                // Send updated caption to the server
+                                fetch(`/update_caption`, {
+                                    method: "POST",
+                                    headers: { "Content-Type": "application/json" },
+                                    body: JSON.stringify({
+                                        project_name: captionInfo.project_name,
+                                        caption: captionText.value
+                                    })
+                                }).then(response => response.json())
+                                  .then(data => {
+                                    if (!data.success) {
+                                        console.error("Failed to update caption on server.");
+                                    }
+                                });
+                            }
+                        };
+
+                        // Delete project
+                        const deleteButton = document.createElement("button");
+                        deleteButton.classList.add("btn", "btn-danger", "mt-3", "ml-2");
+                        deleteButton.textContent = "Delete";
+                        deleteButton.onclick = () => {
+                            fetch(`/delete_project`, {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ project_name: captionInfo.project_name })
+                            }).then(response => response.json())
+                              .then(data => {
+                                if (data.success) {
+                                    projectCard.remove(); // Remove from UI
+                                } else {
+                                    console.error("Failed to delete project on server.");
+                                }
+                            });
+                        };
+
+                        cardBody.appendChild(title);
+                        cardBody.appendChild(captionText);
+                        cardBody.appendChild(editButton);
+                        cardBody.appendChild(deleteButton);
+
+                        // Add images
+                        const imageRow = document.createElement("div");
+                        imageRow.classList.add("row");
+                        captionInfo.images.forEach(imageUrl => {
+                            const imageCol = document.createElement("div");
+                            imageCol.classList.add("col-md-4");
+                            const img = document.createElement("img");
+                            img.src = imageUrl;
+                            img.classList.add("img-fluid", "rounded");
+                            imageCol.appendChild(img);
+                            imageRow.appendChild(imageCol);
+                        });
+
+                        cardBody.appendChild(imageRow);
+                        projectCard.appendChild(cardBody);
+                        document.getElementById("captions-container").appendChild(projectCard);
+                    };
+
+                    eventSource.onerror = function() {
+                        eventSource.close();
+                        document.getElementById("loading-spinner").style.display = "none";
+                        document.getElementById("stopButton").style.display = "none"; // Hide stop button
+                    };
+
+                    // Stop button functionality
+                    document.getElementById("stopButton").onclick = function() {
+                        fetch("/stop_process", { method: "POST" })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    eventSource.close(); // Close the EventSource connection
+                                    document.getElementById("loading-spinner").style.display = "none";
+                                    document.getElementById("stopButton").style.display = "none";
+                                } else {
+                                    console.error("Failed to stop the process.");
+                                }
+                            })
+                            .catch(error => console.error("Error stopping process:", error));
+                    };
+                } else {
+                    console.error("Error during file upload.");
+                    document.getElementById("loading-spinner").style.display = "none";
+                }
+            }).catch(error => {
+                console.error("Error:", error);
+                document.getElementById("loading-spinner").style.display = "none";
+            });
+        };
+    </script>
+</body>
+</html>
