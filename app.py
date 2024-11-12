@@ -13,13 +13,10 @@ import logging
 
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
-UPLOAD_FOLDER = 'data/submissions'
 OUTPUT_FOLDER = 'static/data/newpost'
 ARCHIVE_FOLDER = 'static/data/submissions'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Ensure upload, output, and archive directories exist
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 os.makedirs(ARCHIVE_FOLDER, exist_ok=True)
 

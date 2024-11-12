@@ -8,8 +8,10 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
+    <div class="background-animation"></div> <!-- New div for background animation -->
+
     <div class="container mt-5 p-4 rounded shadow">
-        <h1 class="text-center mb-4">✨ Caption Generator ✨</h1>
+        <h1 class="text-center mb-4">Caption Generator</h1>
         
         <!-- Drag-and-Drop Upload Zone -->
         <div id="upload-zone" class="upload-zone text-center">
@@ -22,7 +24,6 @@
 
         <!-- File Upload Success Alert -->
         <div id="file-upload-status" class="alert alert-success alert-dismissible fade show mt-4 text-center" role="alert" style="display: none;">
-            <i class="fas fa-check-circle fa-lg"></i>
             <strong>Success!</strong> Your file has been uploaded and is ready for processing.
             <button type="button" class="close" aria-label="Close" onclick="document.getElementById('file-upload-status').style.display='none';">
                 <span aria-hidden="true">&times;</span>
@@ -30,19 +31,21 @@
         </div>
         
         <!-- Stop and Pause Process Buttons -->
-        <div class="text-center">
-            <button id="stopButton" class="btn btn-danger mt-3" style="display: none;">⏹ Stop Process</button>
-            <button id="pauseButton" class="btn btn-warning mt-3" style="display: none;">⏸ Pause Process</button>
+        <div class="button-group mt-3 text-center">
+            <button id="stopButton" class="btn btn-stop">Stop Process</button>
+            <button id="pauseButton" class="btn btn-pause">Pause Process</button>
         </div>
         
         <!-- Loading Spinner -->
         <div id="loading-spinner" class="text-center mt-5" style="display: none;">
-            <div id="loading-spinner-icon" class="spinner-border text-primary" role="status"></div>
+            <div id="loading-spinner-icon" class="spinner-border" role="status"></div>
             <p id="loading-spinner-text" class="mt-3 font-weight-bold">Generating captions and downloading images, please wait...</p>
         </div>
+    </div>
 
-        <!-- Caption Content Container -->
-        <h3 class="text-center mt-5 font-weight-bold">Generated Captions</h3>
+    <!-- Generated Captions Section (Initially Hidden) -->
+    <div id="generated-captions-box" class="generated-captions-container mt-5 p-4 rounded shadow" style="display: none;">
+        <h3 class="text-center font-weight-bold">Generated Captions</h3>
         <div id="captions-container" class="captions-container mt-3"></div>
     </div>
 

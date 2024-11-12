@@ -5,6 +5,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const stopButton = document.getElementById("stopButton");
     const pauseButton = document.getElementById("pauseButton");
     const fileUploadStatus = document.getElementById("file-upload-status");
+    const generatedCaptionsBox = document.getElementById("generated-captions-box");
+
+    // Hide Stop and Pause buttons initially
+    stopButton.style.display = "none";
+    pauseButton.style.display = "none";
 
     // Trigger file input when clicking on the upload zone
     uploadZone.addEventListener("click", () => fileInput.click());
@@ -46,9 +51,15 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        document.getElementById("loading-spinner").style.display = "block";
+        // Show and animate the "Generated Captions" box
+        generatedCaptionsBox.style.display = "block";
+        setTimeout(() => generatedCaptionsBox.classList.add("fade-in"), 50);
+
+        // Display Stop and Pause buttons
         stopButton.style.display = "block";
         pauseButton.style.display = "block";
+
+        document.getElementById("loading-spinner").style.display = "block";
 
         const formData = new FormData();
         formData.append("file", fileInput.files[0]);
