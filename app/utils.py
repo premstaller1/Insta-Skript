@@ -54,53 +54,94 @@ def download_images(project_dir, visuals_links, caption_info):
 
 ###################################################################
 
-def create_media_container(profile, image_url=None, caption="", is_carousel=False, children=None):
+# Function to create a media container for carousel items
+def create_carousel_item(access_token, ig_user_id, media_url, media_type="IMAGE"):
     """
-    Create a media container for Instagram.
+    Create a container for an image or video in a carousel.
     
-    :param profile: The profile name ('productminimal' or 'productsdesign').
-    :param image_url: URL of the image to upload.
-    :param caption: Caption for the media.
-    :param is_carousel: Whether the media is part of a carousel.
-    :param children: Child container IDs for a carousel.
-    :return: Container ID.
+    Parameters:
+        access_token (str): Instagram access token.
+        ig_user_id (str): Instagram user ID.
+        media_url (str): URL of the media file (image or video).
+        media_type (str): Type of media ("IMAGE" or "VIDEO").
+
+    Returns:
+        str: Media container ID.
     """
-    creds = get_creds(profile)
-    url = f"{creds['endpoint_base']}{creds['instagram_account_id']}/media"
+    url = f"https://graph.facebook.com/v21.0/{ig_user_id}/media"
     payload = {
-        "access_token": creds["access_token"],
-        "caption": caption
+        "access_token": access_token,
+        "is_carousel_item": True,
     }
-    if is_carousel:
-        payload["media_type"] = "CAROUSEL"
-        payload["children"] = ",".join(children)
-    elif image_url:
-        payload["image_url"] = image_url
+
+    if media_type == "IMAGE":
+        payload["image_url"] = media_url
+    elif media_type == "VIDEO":
+        payload["media_type"] = "VIDEO"
+        payload["video_url"] = media_url
     else:
-        raise ValueError("Either image_url or is_carousel with children must be provided.")
+        raise ValueError("Invalid media type. Only 'IMAGE' and 'VIDEO' are supported.")
 
     response = requests.post(url, data=payload)
-    if response.status_code != 200:
-        logging.error(f"Error creating media container: {response.text}")
-        raise Exception(f"Failed to create media container: {response.text}")
-    return response.json().get("id")
+    if response.status_code == 200:
+        return response.json().get("id")
+    else:
+        logging.error(f"Error creating carousel item: {response.text}")
+        raise Exception(f"Failed to create carousel item: {response.text}")
 
-def publish_media_container(profile, container_id):
+
+# Function to create the main carousel container
+def create_carousel_container(access_token, ig_user_id, children_ids, caption=""):
     """
-    Publish a media container to Instagram.
-    
-    :param profile: The profile name ('productminimal' or 'productsdesign').
-    :param container_id: The container ID to publish.
-    :return: Media ID.
+    Create a container for a carousel post.
+
+    Parameters:
+        access_token (str): Instagram access token.
+        ig_user_id (str): Instagram user ID.
+        children_ids (list): List of container IDs for carousel items.
+        caption (str): Caption for the carousel post.
+
+    Returns:
+        str: Carousel container ID.
     """
-    creds = get_creds(profile)
-    url = f"{creds['endpoint_base']}{creds['instagram_account_id']}/media_publish"
+    url = f"https://graph.facebook.com/v21.0/{ig_user_id}/media"
     payload = {
-        "creation_id": container_id,
-        "access_token": creds["access_token"]
+        "access_token": access_token,
+        "media_type": "CAROUSEL",
+        "children": ",".join(children_ids),
+        "caption": caption,
     }
+
     response = requests.post(url, data=payload)
-    if response.status_code != 200:
-        logging.error(f"Error publishing media container: {response.text}")
-        raise Exception(f"Failed to publish media: {response.text}")
-    return response.json().get("id")
+    if response.status_code == 200:
+        return response.json().get("id")
+    else:
+        logging.error(f"Error creating carousel container: {response.text}")
+        raise Exception(f"Failed to create carousel container: {response.text}")
+
+
+# Function to publish the carousel post
+def publish_carousel(access_token, ig_user_id, creation_id):
+    """
+    Publish a carousel post.
+
+    Parameters:
+        access_token (str): Instagram access token.
+        ig_user_id (str): Instagram user ID.
+        creation_id (str): Carousel container ID.
+
+    Returns:
+        str: Instagram media ID of the published carousel.
+    """
+    url = f"https://graph.facebook.com/v21.0/{ig_user_id}/media_publish"
+    payload = {
+        "access_token": access_token,
+        "creation_id": creation_id,
+    }
+
+    response = requests.post(url, data=payload)
+    if response.status_code == 200:
+        return response.json().get("id")
+    else:
+        logging.error(f"Error publishing carousel: {response.text}")
+        raise Exception(f"Failed to publish carousel: {response.text}")

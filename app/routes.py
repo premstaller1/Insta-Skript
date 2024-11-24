@@ -1,5 +1,5 @@
-from flask import Blueprint, render_template, request, Response, session, jsonify, url_for
-from app.utils import save_details_to_file, download_images, create_media_container, publish_media_container
+from flask import Blueprint, render_template, request, Response, session, jsonify, current_app
+from app.utils import save_details_to_file, download_images, create_carousel_item, create_carousel_container, publish_carousel
 from app.services import generate_caption, sanitize_filename
 from app.config import get_creds
 import os
@@ -14,29 +14,35 @@ from werkzeug.utils import secure_filename
 main_bp = Blueprint('main', __name__)
 media_bp = Blueprint("media", __name__)
 
-BASE_URL = "http://127.0.0.1:5000"
 OUTPUT_FOLDER = 'app/static/data/newpost'
 ARCHIVE_FOLDER = 'app/static/data/submissions'
-UPLOAD_FOLDER = "static/uploads"
+UPLOAD_FOLDER = 'app/static/uploads'
 
 stop_process_flag = False
 pause_process_flag = False
 
 logging.basicConfig(level=logging.INFO)
 
+# Ensure necessary directories exist
+os.makedirs(OUTPUT_FOLDER, exist_ok=True)
+os.makedirs(ARCHIVE_FOLDER, exist_ok=True)
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+
 @main_bp.route('/', methods=['GET'])
 def index():
     return render_template('index.html')
+
 
 @main_bp.route('/caption_generator', methods=['GET'])
 def caption_generator():
     return render_template('caption_generator.html')
 
+
 @media_bp.route("/", methods=["GET"])
-def index():
+def publish_instagram():
     return render_template('publish_instagram.html')
 
-#################################################################################
 
 @main_bp.route('/upload_and_process', methods=['POST'])
 def upload_and_process():
@@ -60,7 +66,7 @@ def upload_and_process():
             return jsonify(success=True)
         else:
             logging.error("Failed to upload file: Invalid file type or no file provided.")
-            return jsonify(success=False), 400
+            return jsonify(success=False, message="Invalid file type."), 400
     except Exception as e:
         logging.exception("Error occurred during file upload and process.")
         return jsonify(success=False, message=str(e)), 500
@@ -68,11 +74,10 @@ def upload_and_process():
 
 @main_bp.route('/stream_process', methods=['GET'])
 def stream_process():
-    global stop_process_flag, pause_process_flag
     file_path = session.get('file_path')
     if not file_path:
         logging.error("File path not found in session")
-        return jsonify(success=False), 400
+        return jsonify(success=False, message="No file found in session."), 400
 
     def generate():
         logging.info(f"Starting caption generation from file: {file_path}")
@@ -99,6 +104,8 @@ def stream_process():
             caption_info = {
                 "project_name": project_name,
                 "caption": caption,
+                "description": description,  # Include description
+                "designer": designer,        # Include designer
                 "images": [],
                 "videos": []
             }
@@ -116,16 +123,14 @@ def stream_process():
             yield f"data: {json.dumps(caption_info)}\n\n"
             time.sleep(1)
 
-        logging.info("Generator stopped")
-
     return Response(generate(), mimetype='text/event-stream')
 
 @main_bp.route('/update_caption', methods=['POST'])
 def update_caption():
     data = request.get_json()
     project_name = data['project_name']
-    description = data['Project Description']
-    designer = data['Instagram @']
+    description = data['description']
+    designer = data['designer']
     new_caption = data['caption']
     sanitized_project_name = sanitize_filename(project_name)
 
@@ -204,86 +209,77 @@ def accept_project():
 
 #######################################################################
 
-MAX_MEDIA_COUNT = 10
-uploaded_files = []
-
-@media_bp.route("/upload", methods=["POST"])
-def upload_media():
-    if len(uploaded_files) >= MAX_MEDIA_COUNT:
-        return jsonify(success=False, message="You can upload a maximum of 10 files."), 400
-
-    file = request.files.get("file")
-    if not file:
-        return jsonify(success=False, message="No file uploaded."), 400
-
-    file_ext = os.path.splitext(file.filename)[1].lower()
-    if file_ext not in [".jpg", ".jpeg", ".mp4"]:
-        return jsonify(success=False, message="Only JPG and MP4 files are allowed."), 400
-
-    file_path = os.path.join(UPLOAD_FOLDER, file.filename)
-    file.save(file_path)
-    uploaded_files.append({"filename": file.filename, "path": file_path})
-
-    return jsonify(success=True, files=uploaded_files)
-
-@media_bp.route("/delete", methods=["POST"])
-def delete_media():
-    file_name = request.json.get("filename")
-    for file in uploaded_files:
-        if file["filename"] == file_name:
-            uploaded_files.remove(file)
-            os.remove(file["path"])
-            return jsonify(success=True, files=uploaded_files)
-
-    return jsonify(success=False, message="File not found."), 404
-
-@media_bp.route("/publish", methods=["POST"])
-def publish_media():
-    profile = request.json.get("profile")
-    caption = request.json.get("caption", "")
-
-    if not profile:
-        return jsonify(success=False, message="No profile selected."), 400
-
-    if not uploaded_files:
-        return jsonify(success=False, message="No media to publish."), 400
-
-    creds = get_creds(profile)
-    container_ids = []
-
-    # Create individual media containers
+@media_bp.route("/upload_carousel", methods=["POST"])
+def upload_carousel():
+    """
+    Handle uploading media for carousel posts and creating individual containers.
+    """
     try:
-        for file in uploaded_files:
-            media_url = request.host_url + f"static/uploads/{file['filename']}"
-            container_id = create_media_container(
-                creds["access_token"],
-                creds["instagram_account_id"],
-                image_url=media_url,
-                caption=caption
-            )
-            container_ids.append(container_id)
+        # Extract required data
+        profile = request.form.get("profile")
+        files = request.files.getlist("files")
 
-        # Create carousel container if more than one file
-        if len(container_ids) > 1:
-            carousel_container_id = create_media_container(
-                creds["access_token"],
-                creds["instagram_account_id"],
-                is_carousel=True,
-                children=container_ids,
-                caption=caption
-            )
-            publish_media_container(
-                creds["access_token"],
-                creds["instagram_account_id"],
-                carousel_container_id
-            )
-        else:
-            publish_media_container(
-                creds["access_token"],
-                creds["instagram_account_id"],
-                container_ids[0]
-            )
+        if not profile or not files:
+            return jsonify(success=False, message="Profile and files are required."), 400
 
-        return jsonify(success=True, message="Media published successfully!")
+        if len(files) > 10:
+            return jsonify(success=False, message="You can upload a maximum of 10 files."), 400
+
+        creds = get_creds(profile)
+        access_token = creds["access_token"]
+        ig_user_id = creds["instagram_account_id"]
+
+        # Create containers for each file
+        children_ids = []
+        for file in files:
+            # Save file locally to generate a URL (assuming files are served from static/uploads)
+            filename = secure_filename(file.filename)
+            file_path = os.path.join(UPLOAD_FOLDER, filename)
+            file.save(file_path)
+
+            # Generate public URL for the media
+            media_url = f"{request.host_url}static/uploads/{filename}"
+
+            # Determine media type
+            media_type = "IMAGE" if file.content_type.startswith("image") else "VIDEO"
+
+            # Create a container for the carousel item
+            container_id = create_carousel_item(access_token, ig_user_id, media_url, media_type)
+            children_ids.append(container_id)
+
+        return jsonify(success=True, children_ids=children_ids)
+
     except Exception as e:
+        logging.exception("Error uploading carousel items.")
+        return jsonify(success=False, message=str(e)), 500
+
+
+@media_bp.route("/publish_carousel", methods=["POST"])
+def publish_carousel_route():
+    """
+    Handle publishing a carousel post.
+    """
+    try:
+        data = request.json
+        profile = data.get("profile")
+        caption = data.get("caption", "")
+        children_ids = data.get("children_ids")
+
+        if not profile or not children_ids:
+            return jsonify(success=False, message="Profile and children IDs are required."), 400
+
+        creds = get_creds(profile)
+        access_token = creds["access_token"]
+        ig_user_id = creds["instagram_account_id"]
+
+        # Create carousel container
+        carousel_container_id = create_carousel_container(access_token, ig_user_id, children_ids, caption)
+
+        # Publish the carousel
+        media_id = publish_carousel(access_token, ig_user_id, carousel_container_id)
+
+        return jsonify(success=True, media_id=media_id)
+
+    except Exception as e:
+        logging.exception("Error publishing carousel.")
         return jsonify(success=False, message=str(e)), 500

@@ -104,6 +104,8 @@ document.addEventListener("DOMContentLoaded", () => {
                                 headers: { "Content-Type": "application/json" },
                                 body: JSON.stringify({
                                     project_name: captionInfo.project_name,
+                                    designer: captionInfo.designer,
+                                    description: captionInfo.description,
                                     caption: captionText.value
                                 })
                             });

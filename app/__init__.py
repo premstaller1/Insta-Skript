@@ -1,5 +1,5 @@
 from flask import Flask
-from app.routes import main_bp
+from app.routes import main_bp, media_bp
 import os
 
 # Initialize the Flask app
@@ -16,3 +16,7 @@ os.makedirs(ARCHIVE_FOLDER, exist_ok=True)
 
 # Register Blueprint
 app.register_blueprint(main_bp)
+
+
+# Register the media blueprint with the prefix "/publish_instagram"
+app.register_blueprint(media_bp, url_prefix='/publish_instagram')

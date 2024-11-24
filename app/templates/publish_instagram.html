@@ -50,9 +50,10 @@
         <div class="form-group">
             <label for="file-input">Upload Media (Max 10)</label>
             <input type="file" class="form-control-file" id="file-input" accept=".jpg,.jpeg,.mp4" multiple>
-            <small class="form-text text-muted">Supported formats: JPG, MP4</small>
+            <small class="form-text text-muted">Supported formats: JPG, MP4. Maximum size: 5MB per file.</small>
         </div>
         <button class="btn btn-primary mb-4" id="upload-button">Upload</button>
+        <div id="upload-feedback" class="text-success"></div>
 
         <!-- Media Preview Section -->
         <h5 class="mb-3">Uploaded Media</h5>
@@ -61,7 +62,7 @@
         <!-- Publish Form -->
         <div class="form-group">
             <label for="caption">Caption</label>
-            <textarea class="form-control caption-text" id="caption" name="caption" rows="3" placeholder="Write your caption here..." required></textarea>
+            <textarea class="form-control caption-text" id="caption" name="caption" rows="3" placeholder="Write your caption here..." required maxlength="2200"></textarea>
         </div>
         <button class="btn btn-success" id="publish-button">Publish to Instagram</button>
     </div>
