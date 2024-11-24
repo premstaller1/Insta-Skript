@@ -1,5 +1,5 @@
 posts/
 .venv
-static/data/newpost/
-static/data/submissions/
+app/static/data/
 __pycache__
+config.py

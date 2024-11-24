@@ -1,0 +1,18 @@
+from flask import Flask
+from app.routes import main_bp
+import os
+
+# Initialize the Flask app
+app = Flask(__name__)
+app.secret_key = 'your_generated_secret_key_here'
+
+# Configure directories
+OUTPUT_FOLDER = 'static/data/newpost'
+ARCHIVE_FOLDER = 'static/data/submissions'
+UPLOAD_FOLDER = "static/uploads"
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+os.makedirs(OUTPUT_FOLDER, exist_ok=True)
+os.makedirs(ARCHIVE_FOLDER, exist_ok=True)
+
+# Register Blueprint
+app.register_blueprint(main_bp)

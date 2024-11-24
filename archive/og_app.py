@@ -3,8 +3,8 @@ import os
 import pandas as pd
 from werkzeug.utils import secure_filename
 import requests
-from main import generate_caption
-from create_file import sanitize_filename
+from archive.langchain import generate_caption
+from archive.create_file import sanitize_filename
 import json
 import time
 from datetime import datetime
@@ -26,6 +26,18 @@ BASE_URL = "http://127.0.0.1:5000"  # Base URL for constructing image paths
 stop_process_flag = False
 pause_process_flag = False
 logging.basicConfig(level=logging.INFO)
+
+@app.route('/', methods=['GET'])
+def index():
+    return render_template('index.html')
+
+@app.route('/caption_generator')
+def caption_generator():
+    return render_template('caption_generator.html')
+
+@app.route('/publish_instagram')
+def publish_instagram():
+    return render_template('publish_instagram.html')  # Replace with the Instagram publish HTML file.
 
 
 def save_details_to_file(details_path, project_details):
@@ -75,11 +87,6 @@ def download_images(project_dir, visuals_links, caption_info):
                     logging.warning(f"File at {url} could not be downloaded (Status code: {response.status_code})")
             except Exception as e:
                 logging.error(f"Error downloading file from {url}: {e}")
-
-
-@app.route('/', methods=['GET'])
-def index():
-    return render_template('index.html')
 
 
 @app.route('/upload_and_process', methods=['POST'])

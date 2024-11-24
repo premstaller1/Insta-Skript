@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 import requests
-from main import generate_caption
+from archive.langchain import generate_caption
 
 def sanitize_filename(filename):
     # Define invalid characters

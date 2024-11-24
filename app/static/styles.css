@@ -234,3 +234,50 @@ body {
     border-radius: 8px;
     max-width: 100%;
 }
+
+/* Navigation Bar Styling */
+.navbar {
+    background-color: #2a2a2a;
+    border-bottom: 2px solid #444;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+    z-index: 10; /* Ensure it stays above other elements */
+    width: 100%;
+}
+
+.navbar-brand, .nav-link {
+    color: #e0e0e0 !important;
+    font-weight: bold;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.navbar-brand:hover, .nav-link:hover {
+    color: #ddd !important;
+    transform: translateY(-2px);
+}
+
+.navbar-nav {
+    margin-left: auto;
+}
+
+.nav-item {
+    margin-right: 15px;
+}
+
+.nav-item:last-child {
+    margin-right: 0;
+}
+
+/* Active Link */
+.nav-link.active {
+    color: #f39c12 !important;
+    border-bottom: 2px solid #f39c12;
+}
+
+/* Navbar Mobile View */
+.navbar-toggler {
+    border: none;
+}
+
+.navbar-toggler-icon {
+    background-image: url('data:image/svg+xml;charset=utf8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30"%3E%3Cpath stroke="rgba%2888, 88, 88, 1%29" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"/%3E%3C/svg%3E');
+}
