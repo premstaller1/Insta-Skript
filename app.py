@@ -39,23 +39,42 @@ def save_details_to_file(details_path, project_details):
 
 
 def download_images(project_dir, visuals_links, caption_info):
-    """Helper function to download images for a project."""
+    """Helper function to download images and videos for a project."""
     if pd.notna(visuals_links):
         urls = visuals_links.split(';')
         for i, url in enumerate(urls):
             try:
-                response = requests.get(url.strip())
-                if response.status_code == 200:
-                    image_filename = f'image_{i+1}.jpg'
-                    image_path = os.path.join(project_dir, image_filename)
-                    with open(image_path, 'wb') as img_file:
-                        img_file.write(response.content)
-                    image_url = f"{BASE_URL}/static/data/newpost/{os.path.basename(project_dir)}/{image_filename}"
-                    caption_info["images"].append(image_url)
+                url = url.strip()
+                if "video.wixstatic.com/video/" in url:
+                    filename = f'video_{i+1}.mp4'  # Assume videos are MP4
+                    category = "videos"
+                elif "static.wixstatic.com/media/" in url:
+                    # Extract the file extension for images
+                    file_extension = os.path.splitext(url.split('?')[0])[1]
+                    if file_extension.lower() not in ['.jpg', '.jpeg', '.png', '.gif']:
+                        logging.warning(f"Unrecognized file extension for URL {url}: {file_extension}")
+                        continue
+                    filename = f'image_{i+1}{file_extension}'
+                    category = "images"
                 else:
-                    logging.warning(f"Image at {url} could not be downloaded (Status code: {response.status_code})")
+                    logging.warning(f"Unrecognized URL pattern for URL {url}")
+                    continue
+
+                # Download and save the file
+                response = requests.get(url, stream=True)
+                if response.status_code == 200:
+                    file_path = os.path.join(project_dir, filename)
+                    with open(file_path, 'wb') as file:
+                        shutil.copyfileobj(response.raw, file)
+
+                    # Add the file URL to the appropriate category
+                    file_url = f"{BASE_URL}/static/data/newpost/{os.path.basename(project_dir)}/{filename}"
+                    logging.info(f"File saved to: {file_path}")
+                    caption_info[category].append(file_url)
+                else:
+                    logging.warning(f"File at {url} could not be downloaded (Status code: {response.status_code})")
             except Exception as e:
-                logging.error(f"Error downloading image from {url}: {e}")
+                logging.error(f"Error downloading file from {url}: {e}")
 
 
 @app.route('/', methods=['GET'])
@@ -68,7 +87,7 @@ def upload_and_process():
     global stop_process_flag, pause_process_flag
     stop_process_flag = False  # Reset stop flag when starting a new process
     pause_process_flag = False  # Reset pause flag
-    
+
     file = request.files['file']
     if file and file.filename.endswith('.csv'):
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -100,11 +119,11 @@ def stream_process():
             if stop_process_flag:
                 logging.info("Process stopped by user")
                 break  # Break the loop to stop the generator
-            
+
             while pause_process_flag:
                 logging.info("Process paused")
                 time.sleep(1)  # Check every second if the process is resumed
-            
+
             project_name = row['Project Name']
             description = row['Project Description']
             designer = row['Instagram @']
@@ -118,11 +137,12 @@ def stream_process():
             project_dir = os.path.join(OUTPUT_FOLDER, f"{sanitized_project_name}_{index+1}")
             os.makedirs(project_dir, exist_ok=True)
 
-            # Caption and image info for the current project
+            # Caption and media info for the current project
             caption_info = {
                 "project_name": project_name,
                 "caption": caption,
-                "images": []
+                "images": [],
+                "videos": []
             }
 
             # Save project details to a text file
@@ -137,14 +157,14 @@ def stream_process():
             }
             save_details_to_file(details_path, project_details)
 
-            # Download images and update URL paths
+            # Download images and videos and update URL paths
             download_images(project_dir, visuals_links, caption_info)
 
             yield f"data: {json.dumps(caption_info)}\n\n"
             time.sleep(1)
 
         logging.info("Generator stopped")
-    
+
     return Response(generate(), mimetype='text/event-stream')
 
 

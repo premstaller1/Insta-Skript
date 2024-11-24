@@ -151,19 +151,29 @@ document.addEventListener("DOMContentLoaded", () => {
                     cardBody.appendChild(deleteButton);
                     cardBody.appendChild(acceptButton);
 
-                    const imageRow = document.createElement("div");
-                    imageRow.classList.add("row", "mt-3");
-                    captionInfo.images.forEach(imageUrl => {
-                        const imageCol = document.createElement("div");
-                        imageCol.classList.add("col-md-4");
-                        const img = document.createElement("img");
-                        img.src = imageUrl;
-                        img.classList.add("img-fluid", "rounded");
-                        imageCol.appendChild(img);
-                        imageRow.appendChild(imageCol);
+                    const mediaRow = document.createElement("div");
+                    mediaRow.classList.add("row", "mt-3");
+                    [...captionInfo.images, ...captionInfo.videos].forEach(mediaUrl => {
+                        const mediaCol = document.createElement("div");
+                        mediaCol.classList.add("col-md-4");
+
+                        let mediaElement;
+                        if (mediaUrl.endsWith(".mp4")) { // Check for video files
+                            mediaElement = document.createElement("video");
+                            mediaElement.src = mediaUrl;
+                            mediaElement.controls = true;
+                            mediaElement.classList.add("img-fluid", "rounded");
+                        } else { // Assume it's an image
+                            mediaElement = document.createElement("img");
+                            mediaElement.src = mediaUrl;
+                            mediaElement.classList.add("img-fluid", "rounded");
+                        }
+
+                        mediaCol.appendChild(mediaElement);
+                        mediaRow.appendChild(mediaCol);
                     });
 
-                    cardBody.appendChild(imageRow);
+                    cardBody.appendChild(mediaRow);
                     projectCard.appendChild(cardBody);
                     document.getElementById("captions-container").appendChild(projectCard);
                 };
