@@ -54,11 +54,16 @@ def download_images(project_dir, visuals_links, caption_info):
 
 ###################################################################
 
-# Function to create a media container for carousel items
+import logging
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+
+
 def create_carousel_item(access_token, ig_user_id, media_url, media_type="IMAGE"):
     """
-    Create a container for an image or video in a carousel.
-    
+    Create a media container for a single carousel item (image or video).
+
     Parameters:
         access_token (str): Instagram access token.
         ig_user_id (str): Instagram user ID.
@@ -66,7 +71,10 @@ def create_carousel_item(access_token, ig_user_id, media_url, media_type="IMAGE"
         media_type (str): Type of media ("IMAGE" or "VIDEO").
 
     Returns:
-        str: Media container ID.
+        str: Media container ID for the carousel item.
+
+    Raises:
+        Exception: If the API request fails.
     """
     url = f"https://graph.facebook.com/v21.0/{ig_user_id}/media"
     payload = {
@@ -82,18 +90,20 @@ def create_carousel_item(access_token, ig_user_id, media_url, media_type="IMAGE"
     else:
         raise ValueError("Invalid media type. Only 'IMAGE' and 'VIDEO' are supported.")
 
+    logging.info(f"Creating carousel item with URL: {media_url} and type: {media_type}")
     response = requests.post(url, data=payload)
     if response.status_code == 200:
-        return response.json().get("id")
+        container_id = response.json().get("id")
+        logging.info(f"Carousel item created successfully. Container ID: {container_id}")
+        return container_id
     else:
         logging.error(f"Error creating carousel item: {response.text}")
         raise Exception(f"Failed to create carousel item: {response.text}")
 
 
-# Function to create the main carousel container
 def create_carousel_container(access_token, ig_user_id, children_ids, caption=""):
     """
-    Create a container for a carousel post.
+    Create a container for the entire carousel post.
 
     Parameters:
         access_token (str): Instagram access token.
@@ -103,27 +113,32 @@ def create_carousel_container(access_token, ig_user_id, children_ids, caption=""
 
     Returns:
         str: Carousel container ID.
+
+    Raises:
+        Exception: If the API request fails.
     """
     url = f"https://graph.facebook.com/v21.0/{ig_user_id}/media"
     payload = {
         "access_token": access_token,
         "media_type": "CAROUSEL",
-        "children": ",".join(children_ids),
+        "children": ",".join(children_ids),  # Convert list to comma-separated string
         "caption": caption,
     }
 
+    logging.info(f"Creating carousel container with children: {children_ids} and caption: {caption}")
     response = requests.post(url, data=payload)
     if response.status_code == 200:
-        return response.json().get("id")
+        container_id = response.json().get("id")
+        logging.info(f"Carousel container created successfully. Container ID: {container_id}")
+        return container_id
     else:
         logging.error(f"Error creating carousel container: {response.text}")
         raise Exception(f"Failed to create carousel container: {response.text}")
 
 
-# Function to publish the carousel post
 def publish_carousel(access_token, ig_user_id, creation_id):
     """
-    Publish a carousel post.
+    Publish the carousel post.
 
     Parameters:
         access_token (str): Instagram access token.
@@ -132,6 +147,9 @@ def publish_carousel(access_token, ig_user_id, creation_id):
 
     Returns:
         str: Instagram media ID of the published carousel.
+
+    Raises:
+        Exception: If the API request fails.
     """
     url = f"https://graph.facebook.com/v21.0/{ig_user_id}/media_publish"
     payload = {
@@ -139,9 +157,14 @@ def publish_carousel(access_token, ig_user_id, creation_id):
         "creation_id": creation_id,
     }
 
+    logging.info(f"Publishing carousel with creation ID: {creation_id}")
     response = requests.post(url, data=payload)
     if response.status_code == 200:
-        return response.json().get("id")
+        media_id = response.json().get("id")
+        logging.info(f"Carousel published successfully. Media ID: {media_id}")
+        return media_id
     else:
         logging.error(f"Error publishing carousel: {response.text}")
         raise Exception(f"Failed to publish carousel: {response.text}")
+    
+    #problem: i need a online host to share media with FB

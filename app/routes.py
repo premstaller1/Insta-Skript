@@ -215,9 +215,12 @@ def upload_carousel():
     Handle uploading media for carousel posts and creating individual containers.
     """
     try:
+        # Log request details
+        logging.info(f"Request form: {request.form}")
+
         # Extract required data
         profile = request.form.get("profile")
-        files = request.files.getlist("files")
+        files = request.files.getlist("file")
 
         if not profile or not files:
             return jsonify(success=False, message="Profile and files are required."), 400
@@ -238,7 +241,7 @@ def upload_carousel():
             file.save(file_path)
 
             # Generate public URL for the media
-            media_url = f"{request.host_url}static/uploads/{filename}"
+            media_url = f"{request.host_url.rstrip('/')}/static/uploads/{filename}"
 
             # Determine media type
             media_type = "IMAGE" if file.content_type.startswith("image") else "VIDEO"
@@ -260,6 +263,7 @@ def publish_carousel_route():
     Handle publishing a carousel post.
     """
     try:
+        # Parse request data
         data = request.json
         profile = data.get("profile")
         caption = data.get("caption", "")
