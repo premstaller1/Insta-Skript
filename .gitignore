@@ -2,4 +2,4 @@ posts/
 .venv
 app/static/data/
 __pycache__
-config.py
+/app/data
