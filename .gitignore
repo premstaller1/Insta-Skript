@@ -4,5 +4,5 @@ app/static/data/
 __pycache__
 /app/data
 /tmp
+/archive
 .vercel
-.env.development.local

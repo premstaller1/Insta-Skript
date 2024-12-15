@@ -1,0 +1,24 @@
+{
+    "productminimal": {
+        "access_token": "EAAG24jaJaYIBOwMx8ITrQhvuZCj4fL5tb9DruOfnP3egAoACHGQ9DasfSjZBeSKPBGnCljIygXaZBnaRMHkhXlg66ZAsxZC73WUbH5ZA5JHUxTRJeRa81z4dxI0pUP6b7ogPd8LorEuRAZAE3juOBEx2K6EmN7H0xSLjh4zqVlhoDMdFlJZA42TyM69hSsdr0s7DiDtVTjE3",
+        "client_id": "482557670549890",
+        "client_secret": "d62937e7f31973871d86b8242430b73e",
+        "graph_domain": "https://graph.facebook.com",
+        "graph_version": "v16.0",
+        "endpoint_base": "https://graph.facebook.com/v16.0/",
+        "page_id": "482557670549890",
+        "instagram_account_id": "17841447229527043",
+        "ig_username": "productminimal"
+    },
+    "productsdesign": {
+        "access_token": "EAAG24jaJaYIBOwMx8ITrQhvuZCj4fL5tb9DruOfnP3egAoACHGQ9DasfSjZBeSKPBGnCljIygXaZBnaRMHkhXlg66ZAsxZC73WUbH5ZA5JHUxTRJeRa81z4dxI0pUP6b7ogPd8LorEuRAZAE3juOBEx2K6EmN7H0xSLjh4zqVlhoDMdFlJZA42TyM69hSsdr0s7DiDtVTjE3",
+        "client_id": "482557670549890",
+        "client_secret": "d62937e7f31973871d86b8242430b73e",
+        "graph_domain": "https://graph.facebook.com",
+        "graph_version": "v16.0",
+        "endpoint_base": "https://graph.facebook.com/v16.0/",
+        "page_id": "482557670549890",
+        "instagram_account_id": "17841419699397187",
+        "ig_username": "productsdesign"
+    }
+}
