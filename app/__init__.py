@@ -4,7 +4,6 @@ import os
 
 # Initialize the Flask app
 app = Flask(__name__)
-app.secret_key = 'your_generated_secret_key_here'
 
 # Register main blueprint
 app.register_blueprint(main_bp)

@@ -14,9 +14,9 @@ from werkzeug.utils import secure_filename
 main_bp = Blueprint('main', __name__)
 media_bp = Blueprint("media", __name__)
 
-OUTPUT_FOLDER = 'app/static/data/newpost'
-ARCHIVE_FOLDER = 'app/static/data/submissions'
-UPLOAD_FOLDER = 'app/static/uploads'
+OUTPUT_FOLDER = 'app/tmp/newpost'
+ARCHIVE_FOLDER = 'app/tmp/submissions'
+UPLOAD_FOLDER = 'app/tmp/uploads'
 
 stop_process_flag = False
 pause_process_flag = False
