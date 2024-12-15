@@ -2,14 +2,14 @@ from flask import Blueprint, render_template, request, Response, session, jsonif
 from app.utils import save_details_to_file, download_images, create_carousel_item, create_carousel_container, publish_carousel
 from app.services import generate_caption, sanitize_filename
 from app.config import get_creds
+from datetime import datetime
+import vercel_blob
 import os
 import pandas as pd
 import json
 import time
-from datetime import datetime
 import logging
 import shutil
-from werkzeug.utils import secure_filename
 
 main_bp = Blueprint('main', __name__)
 media_bp = Blueprint("media", __name__)
@@ -23,7 +23,7 @@ pause_process_flag = False
 
 logging.basicConfig(level=logging.INFO)
 
-# Ensure necessary directories exist
+# Ensure necessary directories exist locally (still using local directories for temp storage)
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 os.makedirs(ARCHIVE_FOLDER, exist_ok=True)
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -57,12 +57,14 @@ def upload_and_process():
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             original_filename = secure_filename(file.filename)
             filename_with_timestamp = f"{timestamp}_{original_filename}"
-            archived_file_path = os.path.join(ARCHIVE_FOLDER, filename_with_timestamp)
-            logging.info(f"Saving file: {archived_file_path}")
-            file.save(archived_file_path)
+            
+            # Use vercel_blob to upload the file
+            file_content = file.read()
+            blob_response = vercel_blob.put(filename_with_timestamp, file_content)
+            archived_file_url = blob_response['url']
 
-            session['file_path'] = archived_file_path
-            logging.info(f"File uploaded and saved to {archived_file_path}")
+            logging.info(f"File uploaded to Vercel Blob: {archived_file_url}")
+            session['file_url'] = archived_file_url
             return jsonify(success=True)
         else:
             logging.error("Failed to upload file: Invalid file type or no file provided.")
@@ -74,14 +76,18 @@ def upload_and_process():
 
 @main_bp.route('/stream_process', methods=['GET'])
 def stream_process():
-    file_path = session.get('file_path')
-    if not file_path:
-        logging.error("File path not found in session")
+    file_url = session.get('file_url')
+    if not file_url:
+        logging.error("File URL not found in session")
         return jsonify(success=False, message="No file found in session."), 400
 
     def generate():
-        logging.info(f"Starting caption generation from file: {file_path}")
-        df = pd.read_csv(file_path)
+        logging.info(f"Starting caption generation from file: {file_url}")
+
+        # Download the file from Vercel Blob
+        file_content = vercel_blob.download_file(file_url)
+        df = pd.read_csv(file_content)
+
         for index, row in df.iterrows():
             if stop_process_flag:
                 logging.info("Process stopped by user")
@@ -118,12 +124,15 @@ def stream_process():
                 "Caption": caption
             }
             save_details_to_file(details_path, project_details)
+
+            # Download and upload images to vercel_blob
             download_images(project_dir, visuals_links, caption_info)
 
             yield f"data: {json.dumps(caption_info)}\n\n"
             time.sleep(1)
 
     return Response(generate(), mimetype='text/event-stream')
+
 
 @main_bp.route('/update_caption', methods=['POST'])
 def update_caption():
@@ -150,6 +159,7 @@ def update_caption():
         logging.error(f"Project directory for {project_name} not found.")
         return jsonify(success=False), 404
 
+
 @main_bp.route('/delete_project', methods=['POST'])
 def delete_project():
     data = request.get_json()
@@ -170,13 +180,15 @@ def delete_project():
         logging.warning(f"Project folder {project_name} not found.")
         return jsonify(success=False, message="Project folder not found"), 404
 
+
 @main_bp.route('/stop_process', methods=['POST'])
 def stop_process():
     global stop_process_flag
     stop_process_flag = True
-    session.pop('file_path', None)
+    session.pop('file_url', None)
     logging.info("Process stopped by user.")
     return jsonify(success=True)
+
 
 @main_bp.route('/pause_process', methods=['POST'])
 def pause_process():
@@ -184,6 +196,7 @@ def pause_process():
     pause_process_flag = not pause_process_flag
     logging.info(f"Process {'paused' if pause_process_flag else 'resumed'}.")
     return jsonify(success=True, paused=pause_process_flag)
+
 
 @main_bp.route('/accept_project', methods=['POST'])
 def accept_project():
@@ -240,8 +253,10 @@ def upload_carousel():
             file_path = os.path.join(UPLOAD_FOLDER, filename)
             file.save(file_path)
 
-            # Generate public URL for the media
-            media_url = f"{request.host_url.rstrip('/')}/static/uploads/{filename}"
+            # Upload to Vercel Blob Storage
+            with open(file_path, 'rb') as f:
+                blob_response = vercel_blob.put(filename, f.read())
+                media_url = blob_response['url']
 
             # Determine media type
             media_type = "IMAGE" if file.content_type.startswith("image") else "VIDEO"
