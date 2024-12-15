@@ -4,4 +4,3 @@ app/static/data/
 __pycache__
 /app/data
 /app/tmp
-.vercel
