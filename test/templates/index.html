@@ -1,43 +1,168 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>File Upload and Management</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blob Storage Flask App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .container {
+            width: 60%;
+            margin: auto;
+        }
+        h1 {
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="file"] {
+            margin-top: 5px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .blob-list {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Files:</h1>
-    
-    <!-- Upload Form -->
-    <form method="post" enctype="multipart/form-data" action="/upload">
-        <input type="file" class="form-control" name="file" required />
-        <button type="submit">Upload</button>
-    </form>
 
-    <!-- Files Table -->
-    <table>
-        <thead>
-            <tr>
-                <th>Content Disposition</th>
-                <th>Content Type</th>
-                <th>Pathname</th>
-                <th>Size</th>
-                <th>Uploaded At</th>
-                <th>URL</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for file in files %}
-            <tr>
-                <td>{{ file.contentDisposition }}</td>
-                <td>{{ file.contentType }}</td>
-                <td>{{ file.pathname }}</td>
-                <td>{{ file.size }}</td>
-                <td>{{ file.uploadedAt }}</td>
-                <td><a href="{{ url_for('download', url=file.url) }}">Download</a></td>
-                <td><a href="{{ url_for('delete', url=file.url) }}">Delete</a></td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<div class="container">
+    <h1>Blob Storage with Flask</h1>
+
+    <!-- Upload Blob Form -->
+    <div class="form-group">
+        <label for="fileInput">Upload a File:</label>
+        <input type="file" id="fileInput" name="file">
+        <button id="uploadBtn">Upload File</button>
+    </div>
+
+    <!-- List Blobs Button -->
+    <button id="listBtn">List Blobs</button>
+
+    <!-- Blob List -->
+    <div class="blob-list">
+        <h2>Blob List:</h2>
+        <ul id="blobList"></ul>
+    </div>
+
+    <!-- Delete Blob -->
+    <div class="form-group">
+        <label for="deleteUrl">Delete Blob (URL):</label>
+        <input type="text" id="deleteUrl" name="deleteUrl" placeholder="Enter blob URL to delete">
+        <button id="deleteBtn">Delete Blob</button>
+    </div>
+
+    <!-- Blob Metadata -->
+    <div class="form-group">
+        <label for="metadataUrl">Get Blob Metadata (URL):</label>
+        <input type="text" id="metadataUrl" name="metadataUrl" placeholder="Enter blob URL to fetch metadata">
+        <button id="metadataBtn">Get Metadata</button>
+        <div id="metadataResult"></div>
+    </div>
+</div>
+
+<script>
+    const uploadBtn = document.getElementById('uploadBtn');
+    const listBtn = document.getElementById('listBtn');
+    const deleteBtn = document.getElementById('deleteBtn');
+    const metadataBtn = document.getElementById('metadataBtn');
+    const blobList = document.getElementById('blobList');
+    const deleteUrl = document.getElementById('deleteUrl');
+    const metadataUrl = document.getElementById('metadataUrl');
+    const metadataResult = document.getElementById('metadataResult');
+
+    // Upload a file
+    uploadBtn.addEventListener('click', () => {
+        const fileInput = document.getElementById('fileInput');
+        const formData = new FormData();
+        formData.append('file', fileInput.files[0]);
+
+        fetch('/upload_blob', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => alert('File uploaded successfully!'))
+        .catch(error => alert('Error uploading file: ' + error));
+    });
+
+    // List all blobs
+    listBtn.addEventListener('click', () => {
+        fetch('/list_blobs', {
+            method: 'GET'
+        })
+        .then(response => response.json())
+        .then(data => {
+            blobList.innerHTML = '';
+            data.blobs.forEach(blob => {
+                const li = document.createElement('li');
+                li.textContent = `${blob.pathname} - ${blob.size} bytes`;
+                blobList.appendChild(li);
+            });
+        })
+        .catch(error => alert('Error listing blobs: ' + error));
+    });
+
+    // Delete a blob
+    deleteBtn.addEventListener('click', () => {
+        const url = deleteUrl.value;
+        if (!url) {
+            alert('Please enter a blob URL to delete.');
+            return;
+        }
+
+        fetch('/delete_blob', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ url })
+        })
+        .then(response => response.json())
+        .then(data => alert('Blob deleted successfully!'))
+        .catch(error => alert('Error deleting blob: ' + error));
+    });
+
+    // Get blob metadata
+    metadataBtn.addEventListener('click', () => {
+        const url = metadataUrl.value;
+        if (!url) {
+            alert('Please enter a blob URL to fetch metadata.');
+            return;
+        }
+
+        fetch(`/blob_metadata?url=${url}`, {
+            method: 'GET'
+        })
+        .then(response => response.json())
+        .then(data => {
+            metadataResult.innerHTML = `
+                <strong>Metadata:</strong><br>
+                Pathname: ${data.pathname}<br>
+                Size: ${data.size} bytes<br>
+                Content Type: ${data.contentType}<br>
+                Uploaded At: ${new Date(data.uploadedAt).toLocaleString()}
+            `;
+        })
+        .catch(error => alert('Error fetching metadata: ' + error));
+    });
+</script>
+
 </body>
 </html>
