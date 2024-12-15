@@ -6,14 +6,6 @@ import os
 app = Flask(__name__)
 app.secret_key = 'your_generated_secret_key_here'
 
-# Configure directories
-OUTPUT_FOLDER = 'app/static/data/newpost'
-ARCHIVE_FOLDER = 'app/static/data/submissions'
-UPLOAD_FOLDER = "app/static/uploads"
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-os.makedirs(OUTPUT_FOLDER, exist_ok=True)
-os.makedirs(ARCHIVE_FOLDER, exist_ok=True)
-
 # Register main blueprint
 app.register_blueprint(main_bp)
 
